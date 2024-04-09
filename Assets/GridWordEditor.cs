@@ -15,12 +15,19 @@ public class GridWordEditor : Editor
    public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
+        
+        if(GUILayout.Button("Clear Arrow")){
+            _target.ClearArrow();
+        }
+        
         if(GUILayout.Button("Init")){
-           _target.Evaluate();
+           _target.Init();
         }
         
         if(GUILayout.Button("Improve")){
             _target.Improvement();
         }
+        
+        
     }
 }
