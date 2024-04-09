@@ -225,6 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 905479458}
   - component: {fileID: 905479457}
+  - component: {fileID: 905479459}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -263,6 +264,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &905479459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905479456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23bf37b12d0b56d4b9565c5771a89143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CellSize: 0.8
+  gamma: 0.9
+  cells:
+  - {x: 1, y: 1}
+  - {x: 2, y: 1}
+  - {x: 4, y: 1}
+  - {x: 5, y: 1}
+  - {x: 2, y: 2}
+  - {x: 4, y: 2}
+  - {x: 1, y: 3}
+  - {x: 2, y: 3}
+  - {x: 4, y: 3}
+  - {x: 5, y: 3}
+  - {x: 2, y: 4}
+  - {x: 3, y: 4}
+  - {x: 4, y: 5}
+  wallsPosition:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  - {x: 4, y: 0}
+  - {x: 5, y: 0}
+  - {x: 6, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: 2}
+  - {x: 0, y: 3}
+  - {x: 0, y: 4}
+  - {x: 0, y: 5}
+  - {x: 6, y: 1}
+  - {x: 6, y: 2}
+  - {x: 6, y: 3}
+  - {x: 6, y: 4}
+  - {x: 6, y: 5}
+  - {x: 1, y: 5}
+  - {x: 2, y: 5}
+  - {x: 3, y: 5}
+  - {x: 4, y: 5}
+  - {x: 5, y: 5}
+  - {x: 3, y: 1}
+  - {x: 3, y: 2}
+  - {x: 3, y: 3}
+  startBoxsPositions:
+  - {x: 1, y: 2}
+  - {x: 5, y: 2}
+  butonsPositions:
+  - {x: 1, y: 4}
+  - {x: 5, y: 4}
+  startPositionPlayer: {x: 3, y: 4}
 --- !u!1 &1012086923
 GameObject:
   m_ObjectHideFlags: 0
