@@ -16,11 +16,16 @@ public class GridWordEditor : Editor
     {
         DrawDefaultInspector();
         if(GUILayout.Button("Init")){
-           _target.Evaluate();
+           _target.Init();
         }
         
         if(GUILayout.Button("Improve")){
             _target.Improvement();
+        }
+
+        if (GUILayout.Button("ValueIteration"))
+        {
+            _target.valueIteration();
         }
     }
 }

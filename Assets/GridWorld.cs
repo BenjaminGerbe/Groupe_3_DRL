@@ -31,7 +31,7 @@ public class GridWorld : MonoBehaviour
             return 1;
         }
 
-        public  Grid(Vector2Int position,float value,float R,Vector2 boardSize){
+        public  Grid(Vector2Int position,float value,Vector2 boardSize){
             this.boardSize = boardSize;
            
             this.position = position;
@@ -111,7 +111,7 @@ public class GridWorld : MonoBehaviour
 
     }
 
-    public void Evaluate(){
+    public void Init(){
 
         board = new List<Grid>();
         for (int i = 0;i<boardSize.x;i++){
@@ -120,7 +120,7 @@ public class GridWorld : MonoBehaviour
                 if(i == EndPosition.x && j == EndPosition.y){
                     val = 1;
                 }
-                Grid grid = new Grid(new Vector2Int(i,j),0,val,boardSize);
+                Grid grid = new Grid(new Vector2Int(i,j),val,boardSize);
                 board.Add(grid);
                 if(Reward(grid) == 1){
                     grid.policy = new Vector2Int();
@@ -184,6 +184,76 @@ public class GridWorld : MonoBehaviour
 
                 grid.policy = Policy;
                 if (tmp != Policy) {
+                    PolicyStable = false;
+                }
+            }
+        }
+    }
+
+    public Grid checkVMax(Grid grid)
+    {
+        Grid GVmax = grid;
+        if (grid.position == EndPosition)
+        {
+            Debug.Log("caseFinal");
+            return null;
+        }
+
+        if (grid.IsPossibleMove(Vector2Int.right) > 0 && board[GetGrid(grid, Vector2Int.right)].value >= GVmax.value)
+        {
+            GVmax = board[GetGrid(grid, Vector2Int.right)];
+            grid.value = /*Reward(GVmax) +*/ gamma * GVmax.value;
+            Debug.Log(grid.value);
+            grid.policy = Vector2Int.right;
+        }
+
+        if (grid.IsPossibleMove(Vector2Int.left) > 0 && board[GetGrid(grid, Vector2Int.left)].value >= GVmax.value)
+        {
+            GVmax = board[GetGrid(grid, Vector2Int.left)];
+            grid.value = /*Reward(GVmax) +*/ gamma * GVmax.value;
+            Debug.Log(grid.value);
+            grid.policy = Vector2Int.left;
+        }
+
+        if (grid.IsPossibleMove(Vector2Int.down) > 0 && board[GetGrid(grid, Vector2Int.down)].value >= GVmax.value)
+        {
+            GVmax = board[GetGrid(grid, Vector2Int.down)];
+            grid.value = /*Reward(GVmax) +*/ gamma * GVmax.value;
+            Debug.Log(grid.value);
+            grid.policy = Vector2Int.down;
+        }
+
+        if (grid.IsPossibleMove(Vector2Int.up) > 0 && board[GetGrid(grid, Vector2Int.up)].value >= GVmax.value)
+        {
+            GVmax = board[GetGrid(grid, Vector2Int.up)];
+            grid.value = /*Reward(GVmax) +*/ gamma * GVmax.value;
+            Debug.Log(grid.value);
+            grid.policy = Vector2Int.up;
+        }
+        return GVmax;
+    }
+
+    public void valueIteration()
+    {
+        bool PolicyStable = false;
+        while (!PolicyStable)
+        {
+            PolicyStable = true;
+            for (int i = 0; i < board.Count; i++)
+            {
+                if (board[i].position == EndPosition)
+                    continue;
+                Grid grid = board[i];
+                Vector2Int tmp = grid.policy;
+                float max = float.MinValue;
+                Vector2Int Policy = grid.policy;
+                Grid nxtG = checkVMax(grid);
+
+                Policy = grid.policy;
+
+
+                if (tmp != Policy)
+                {
                     PolicyStable = false;
                 }
             }
