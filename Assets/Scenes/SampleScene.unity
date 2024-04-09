@@ -9888,7 +9888,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!4 &2108444550
+=======
+--- !u!114 &1270547680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270547679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e805cdac4e8a06479bb2f362fba485f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EndPosition: {x: 4, y: 4}
+  boardSize: {x: 9, y: 9}
+  BoxSize: 1
+  gamma: 0.9
+--- !u!4 &1270547681
+>>>>>>> d406cca0bb6a1cfdb996f0890b886f3275a2adb2
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
