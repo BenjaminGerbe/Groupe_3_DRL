@@ -224,7 +224,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 905479458}
-  - component: {fileID: 905479457}
   - component: {fileID: 905479459}
   m_Layer: 0
   m_Name: GameManager
@@ -233,22 +232,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &905479457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 905479456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e805cdac4e8a06479bb2f362fba485f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EndPosition: {x: 0, y: 0}
-  boardSize: {x: 0, y: 0}
-  BoxSize: 0
-  gamma: 0.9
 --- !u!4 &905479458
 Transform:
   m_ObjectHideFlags: 0
@@ -258,7 +241,7 @@ Transform:
   m_GameObject: {fileID: 905479456}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.0531864, y: -11.13508, z: 4.4129148}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -291,7 +274,7 @@ MonoBehaviour:
   - {x: 5, y: 3}
   - {x: 2, y: 4}
   - {x: 3, y: 4}
-  - {x: 4, y: 5}
+  - {x: 4, y: 4}
   wallsPosition:
   - {x: 0, y: 0}
   - {x: 1, y: 0}

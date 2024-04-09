@@ -82,10 +82,12 @@ public class Sokoban : MonoBehaviour
 
     public void Init()
     {
-         List<Cell> board = new List<Cell>();
-         List<Mur> wp = new List<Mur>();
-         List<Box> sbp = new List<Box>();
-         List<Buton> bp = new List<Buton>();
+        Debug.ClearDeveloperConsole();
+
+        List<Cell> board = new List<Cell>();
+        List<Mur> wp = new List<Mur>();
+        List<Box> sbp = new List<Box>();
+        List<Buton> bp = new List<Buton>();
             
         foreach(Vector2Int v in cells)
         {
@@ -107,11 +109,8 @@ public class Sokoban : MonoBehaviour
             bp.Add(new Buton(v));
         }
 
-
-
         map = new MapSokoban(board, wp, sbp, bp, startPositionPlayer);
         
-
     }
 
     void OnDrawGizmos()
@@ -152,5 +151,8 @@ public class Sokoban : MonoBehaviour
             Gizmos.DrawWireCube(position, new Vector3(1, 0, 1) * CellSize);
             Gizmos.DrawCube(new Vector3(map.butonsPositions[l].position.x, 0, map.butonsPositions[l].position.y), Vector3.one * 0.1f);
         }
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawCube(new Vector3(map.player_position.x, 0, map.player_position.y), Vector3.one * (CellSize / 2));
     }
 }
