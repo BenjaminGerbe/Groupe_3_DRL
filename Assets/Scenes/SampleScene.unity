@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e805cdac4e8a06479bb2f362fba485f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EndPosition: {x: 8, y: 8}
+  EndPosition: {x: 4, y: 4}
   boardSize: {x: 9, y: 9}
   BoxSize: 1
   gamma: 0.9
