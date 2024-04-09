@@ -19,5 +19,8 @@ public class SokobanEditor : Editor
         {
             _target.Init();
         }
+        GUILayout.Label("---------------");
+        GUILayout.Space(10);
+        
     }
 }

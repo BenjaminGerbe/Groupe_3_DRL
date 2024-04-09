@@ -191,8 +191,11 @@ public class GridWorld : MonoBehaviour
 
     public void Improvement()
     {
-       DyProg.ValueIteration();
+       DyProg.Improvement();
     }
 
+    public void ValueIteration(){
+        DyProg.ValueIteration();
+    }
 
 }

@@ -27,6 +27,10 @@ public class GridWordEditor : Editor
         if(GUILayout.Button("Improve")){
             _target.Improvement();
         }
+
+        if(GUILayout.Button("ValueIterator")){
+            _target.ValueIteration();
+        }
         
         
     }

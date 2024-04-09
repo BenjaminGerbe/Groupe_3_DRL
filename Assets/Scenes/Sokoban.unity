@@ -208,8 +208,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11876754}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.6789709, y: -0.0066075833, z: 0.0061107045, w: 0.73411006}
+  m_LocalPosition: {x: 2.5986853, y: 7.2734046, z: 1.274713}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 905479458}
   - component: {fileID: 905479459}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Sokoban
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -259,55 +259,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23bf37b12d0b56d4b9565c5771a89143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BoxSize: {x: 5, y: 4}
   CellSize: 0.8
   gamma: 0.9
   cells:
-  - {x: 1, y: 1}
-  - {x: 2, y: 1}
-  - {x: 4, y: 1}
-  - {x: 5, y: 1}
-  - {x: 2, y: 2}
-  - {x: 4, y: 2}
-  - {x: 1, y: 3}
-  - {x: 2, y: 3}
-  - {x: 4, y: 3}
-  - {x: 5, y: 3}
-  - {x: 2, y: 4}
-  - {x: 3, y: 4}
-  - {x: 4, y: 4}
-  wallsPosition:
-  - {x: 0, y: 0}
-  - {x: 1, y: 0}
-  - {x: 2, y: 0}
-  - {x: 3, y: 0}
-  - {x: 4, y: 0}
-  - {x: 5, y: 0}
-  - {x: 6, y: 0}
-  - {x: 0, y: 1}
-  - {x: 0, y: 2}
-  - {x: 0, y: 3}
-  - {x: 0, y: 4}
-  - {x: 0, y: 5}
-  - {x: 6, y: 1}
-  - {x: 6, y: 2}
-  - {x: 6, y: 3}
-  - {x: 6, y: 4}
-  - {x: 6, y: 5}
-  - {x: 1, y: 5}
-  - {x: 2, y: 5}
-  - {x: 3, y: 5}
-  - {x: 4, y: 5}
-  - {x: 5, y: 5}
-  - {x: 3, y: 1}
-  - {x: 3, y: 2}
-  - {x: 3, y: 3}
-  startBoxsPositions:
-  - {x: 1, y: 2}
-  - {x: 5, y: 2}
-  butonsPositions:
-  - {x: 1, y: 4}
-  - {x: 5, y: 4}
-  startPositionPlayer: {x: 3, y: 4}
+  - position: {x: 0, y: 0}
+    value: 4
+  - position: {x: 0, y: 1}
+    value: 1
+  - position: {x: 0, y: 2}
+    value: 4
+  - position: {x: 0, y: 3}
+    value: 2
+  - position: {x: 1, y: 0}
+    value: 4
+  - position: {x: 1, y: 1}
+    value: 4
+  - position: {x: 1, y: 2}
+    value: 4
+  - position: {x: 1, y: 3}
+    value: 4
+  - position: {x: 2, y: 0}
+    value: 0
+  - position: {x: 2, y: 1}
+    value: 0
+  - position: {x: 2, y: 2}
+    value: 0
+  - position: {x: 2, y: 3}
+    value: 3
+  - position: {x: 3, y: 0}
+    value: 4
+  - position: {x: 3, y: 1}
+    value: 4
+  - position: {x: 3, y: 2}
+    value: 4
+  - position: {x: 3, y: 3}
+    value: 4
+  - position: {x: 4, y: 0}
+    value: 4
+  - position: {x: 4, y: 1}
+    value: 1
+  - position: {x: 4, y: 2}
+    value: 4
+  - position: {x: 4, y: 3}
+    value: 2
 --- !u!1 &1012086923
 GameObject:
   m_ObjectHideFlags: 0
