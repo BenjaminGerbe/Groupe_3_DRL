@@ -20,6 +20,13 @@ public class SokobanEditor : Editor
             _target.Init();
         }
         GUILayout.Label("---------------");
+        
+        if (GUILayout.Button("Improvment"))
+        {
+            _target.Improvement();
+        }
+        
+        GUILayout.Label(_target.target.ToString());
         GUILayout.Space(10);
         
     }

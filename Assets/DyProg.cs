@@ -71,7 +71,6 @@ public abstract class DyProg<T,T2>
    
    public void Improvement() {
       bool PolicyStable = false;
-      int gdf = 0;
       while (!PolicyStable)
       {
          Evaluation();
