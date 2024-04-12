@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class Grid{
@@ -15,6 +17,8 @@ public class GridWordDyProg : DyProg<Grid, Vector2Int>
     public Vector2Int[] HolesPosition;
     public Vector2Int boardSize;
     public Vector2Int EndPosition;
+    
+
     public override List<Vector2Int> GetAllPossibleMoves(Grid state)
     {
         List<Vector2Int> possiblesMoves = new List<Vector2Int>();
@@ -72,6 +76,24 @@ public class GridWordDyProg : DyProg<Grid, Vector2Int>
             return 1f;
         }
         return 0f;
+    }
+
+    public override bool IsFinish(Grid state)
+    {
+        return Reward(state) >= 1;
+    }
+    
+    public override int SimulateInt(Grid state, Vector2Int action)
+    {
+        for (int i = 0; i < this.states.Count ; i++)
+        {
+            if(states[i].Item1.position == state.position + action){
+                return i;
+            }
+        }
+        
+        Debug.Assert(false,"the state has not been find in the list of states");
+        return 0;
     }
 
     public override (Grid, float) Simulate(Grid state, Vector2Int action)
@@ -159,8 +181,12 @@ public class GridWorld : MonoBehaviour
 
     public void Init(){
 
-       
+        DateTime before = DateTime.Now;
         DyProg = new GridWordDyProg(boardSize,EndPosition,HolesPosition);
+        DateTime after = DateTime.Now; 
+        TimeSpan duration = after.Subtract(before);
+        Debug.Log(duration.Minutes + " :"+duration.Seconds + ": " + duration.Milliseconds);
+        
         if (Arrows != null)
         {
             for (int i = 0; i < Arrows.Count; i++)
@@ -190,12 +216,20 @@ public class GridWorld : MonoBehaviour
         }
 
     public void Improvement()
-    {
+    { 
+        DateTime before = DateTime.Now;
        DyProg.Improvement();
+       DateTime after = DateTime.Now; 
+       TimeSpan duration = after.Subtract(before);
+       Debug.Log(duration.Minutes + " :"+duration.Seconds + ": " + duration.Milliseconds);
     }
 
     public void ValueIteration(){
+        DateTime before = DateTime.Now;
         DyProg.ValueIteration();
+        DateTime after = DateTime.Now; 
+        TimeSpan duration = after.Subtract(before);
+        Debug.Log(duration.Minutes + " :"+duration.Seconds + ": " + duration.Milliseconds);
     }
 
 }

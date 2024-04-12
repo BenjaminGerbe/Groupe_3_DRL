@@ -19,11 +19,30 @@ public class SokobanEditor : Editor
         {
             _target.Init();
         }
+ 
+        
         GUILayout.Label("---------------");
         
         if (GUILayout.Button("Improvment"))
         {
             _target.Improvement();
+        }
+        
+        if (GUILayout.Button("Value Iteration"))
+        {
+            _target.ValueIteration();
+        }
+        
+        GUILayout.Label("---------------");
+        
+        if (GUILayout.Button("Init MCTS"))
+        {
+            _target.InitMCTS();
+        }
+        
+        if (GUILayout.Button("MCTS"))
+        {
+            _target.StartMCTS();
         }
         
         GUILayout.Label(_target.target.ToString());

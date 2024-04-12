@@ -4,16 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
-[System.Serializable]
-public enum CellType
-{
-    Wall,
-    Box,
-    Player,
-    Empty
-}
 
 [System.Serializable]
 public struct Box
@@ -133,6 +126,51 @@ public class MapSokoban : DyProg<GameState, Vector2Int>
       
         return Rstate;
     }
+    
+    public int GetGameStateInt(GameState state)
+    {
+        bool find = false;
+        (GameState,Vector2Int,float) Rstate  = (this.SarsaList[0].Item1,Vector2Int.zero,-1);
+        int i =-1;
+      
+        while (!find && i < this.SarsaList.Count-1)
+        {
+            i++; 
+            if (state.player != this.SarsaList[i].Item1.player)
+            {
+                continue;
+            }
+            
+            find = false;
+            int similar = 0;
+            for (int j = 0; j < this.SarsaList[i].Item1.boxes.Count; j++)
+            {
+                Box b = this.SarsaList[i].Item1.boxes[j];
+                for (int k = 0; k < state.boxes.Count; k++)
+                {
+                    if (b.position == state.boxes[k].position)
+                    {
+                        similar++;
+                    }
+                }
+
+                if (similar >= state.boxes.Count)
+                {
+                    find = true;
+                    Rstate = this.SarsaList[i];
+                    break;
+                }
+            }
+        }
+
+        if (!find)
+        {
+            this.SarsaList.Add((state,Vector2Int.zero,0));
+        }
+
+        return i;
+    }
+
 
     public void GenerateState(List<Box> box,Vector2Int PlayerPosition, int k)
     {
@@ -184,7 +222,6 @@ public class MapSokoban : DyProg<GameState, Vector2Int>
         return;
     }
 
-
     public override float Reward(GameState state)
     {
         if (GetAllPossibleMoves(state).Count <= 0)
@@ -208,6 +245,11 @@ public class MapSokoban : DyProg<GameState, Vector2Int>
         return reward;
     }
 
+    public override bool IsFinish(GameState state)
+    {
+        return Reward(state) >= 2;
+    }
+
     public override (GameState, float) Simulate(GameState state, Vector2Int action)
     {
         GameState tmp = new GameState( new List<Box>(state.boxes),state.player);
@@ -226,7 +268,26 @@ public class MapSokoban : DyProg<GameState, Vector2Int>
 
         return (tmpState.Item1, tmpState.Item3);
     }
-    
+
+    public override int SimulateInt(GameState state, Vector2Int action)
+    {
+        GameState tmp = new GameState( new List<Box>(state.boxes),state.player);
+        tmp.player += action;
+        for (int i = 0; i < tmp.boxes.Count; i++)
+        {
+            if (tmp.player == tmp.boxes[i].position)
+            {
+                Box b = tmp.boxes[i];
+                b.position += action;
+                tmp.boxes[i] = b;
+            }
+        }
+
+        int idx = GetGameStateInt(tmp);
+
+        return idx;
+    }
+
     public List<Vector2Int> GetAllPossibleMoves(GameState state,Vector2Int _position)
     {
         Vector2Int position = _position;
@@ -290,6 +351,70 @@ public class MapSokoban : DyProg<GameState, Vector2Int>
     }
 }
 
+public class SokobanMCTS : GameManagerMCTS<GameState, Vector2Int>
+{
+    private MapSokoban mapSokoban;
+    private GameState defaultState;
+    
+    
+    public SokobanMCTS(List<Vector2Int> button,Vector2Int BoardSize)
+    {
+        defaultState = new GameState(new List<Box>(),Vector2Int.zero);
+        this.mapSokoban = new MapSokoban(BoardSize, new List<Box>(),button);
+    }
+
+    public override Vector2Int[] GetAllMove()
+    {
+        return MapSokoban.direction;
+    }
+
+    public override List<Vector2Int> GetAllPossibleMove(GameState state)
+    {
+        return mapSokoban.GetAllPossibleMoves(state);
+    }
+
+    public override bool IsFinish(GameState state)
+    {
+        return (mapSokoban.Reward(state) == state.boxes.Count);
+    }
+    public override float GetReward(GameState state)
+    {
+        return mapSokoban.Reward(state);
+    }
+
+    public override bool IsEgal(Vector2Int a, Vector2Int b)
+    {
+        return a == b;
+    }
+
+    public override GameState Play(GameState state, Vector2Int action)
+    {
+        GameState tmp = new GameState( new List<Box>(state.boxes),state.player);
+        tmp.player += action;
+        for (int i = 0; i < tmp.boxes.Count; i++)
+        {
+            if (tmp.player == tmp.boxes[i].position)
+            {
+                Box b = tmp.boxes[i];
+                b.position += action;
+                tmp.boxes[i] = b;
+            }
+        }
+
+        return tmp;
+    }
+
+    public override GameState DefaultState()
+    {
+        return defaultState;
+    }
+
+    public override GameState Copy(GameState state)
+    {
+        return new GameState(new List<Box>(state.boxes), state.player);
+    }
+}
+
 public class Sokoban : MonoBehaviour
 {
     public static Vector2Int[] random_direction = new Vector2Int[4] { Vector2Int.down, Vector2Int.left, Vector2Int.right, Vector2Int.up };
@@ -301,21 +426,39 @@ public class Sokoban : MonoBehaviour
     [Header("Create Map")] 
     public List<Box> box;
     public List<Vector2Int> buttons;
+    public Vector2Int PlayerPosition;
     public int Index;
     MapSokoban map;
     [HideInInspector]
     public string target;
-
     private GameState current;
-
+    private SokobanMCTS sokobanMCTS;
+    private MCTSManager<GameState, Vector2Int> MctsManager;
+    private bool start = false;
     public void Init()
     {
         DateTime before = DateTime.Now;
         map = new MapSokoban(BoxSize,box,buttons);
         DateTime after = DateTime.Now; 
         TimeSpan duration = after.Subtract(before);
-        Debug.Log(duration.Minutes + " :"+duration.Seconds + ": " + duration.Milliseconds);
+        start = true;
         current = map.GetStates()[Index].Item1;
+        Debug.Log(duration.Minutes + " :"+duration.Seconds + ": " + duration.Milliseconds);
+    }
+
+    public void InitMCTS()
+    {
+        sokobanMCTS = new SokobanMCTS(buttons,BoxSize);
+        GameState gameState = new GameState(box,PlayerPosition);
+        current = gameState;
+        start = true;
+        MctsManager = new MCTSManager<GameState, Vector2Int>(sokobanMCTS);
+    }
+
+    private int Current = 0;
+    public void StartMCTS()
+    {
+        StartCoroutine(IA_MCTS());
     }
 
     void DrawGameState(GameState state, Vector2Int offset)
@@ -356,6 +499,17 @@ public class Sokoban : MonoBehaviour
     public void Improvement()
     {
         DateTime before = DateTime.Now;
+        map.Improvement();
+        DateTime after = DateTime.Now; 
+        TimeSpan duration = after.Subtract(before);
+        Debug.Log(duration.Minutes + " :"+duration.Seconds + ": " + duration.Milliseconds);
+        StartCoroutine(IA_Play());
+
+    }
+    
+    public void ValueIteration()
+    {
+        DateTime before = DateTime.Now;
         map.ValueIteration();
         DateTime after = DateTime.Now; 
         TimeSpan duration = after.Subtract(before);
@@ -366,19 +520,37 @@ public class Sokoban : MonoBehaviour
     
     void OnDrawGizmos()
     {
-        if (map!= null){
+        if (start){
             DrawGameState( current,new Vector2Int(0,0));
-
         }
         
     }
 
+    IEnumerator IA_MCTS()
+    {
+
+        while (true)
+        {
+            DateTime before = DateTime.Now;
+            GameState t = (sokobanMCTS.Play(current, (MctsManager.ComputeMCTS(current))));
+            DateTime after = DateTime.Now; 
+            TimeSpan duration = after.Subtract(before);
+            Debug.Log(duration.Minutes + " :"+duration.Seconds + ": " + duration.Milliseconds);
+            current = t;
+
+            yield return new WaitForSeconds(0.5f);
+        }
+
+    }
+    
     IEnumerator IA_Play()
     {
 
         while (true)
         {
+       
             List<Vector2Int> move = map.GetAllPossibleMoves(current);
+            
             float Max = float.MinValue;
             int idx = 0;
             for (int i = 0; i < move.Count; i++)
@@ -390,18 +562,20 @@ public class Sokoban : MonoBehaviour
                     idx = i;
                 }
             }
-
-            current = map.Simulate(current, move[idx]).Item1;
-
-            yield return new WaitForSeconds(1);
+            
+            current =map.Simulate(current, move[idx]).Item1;
+            yield return new WaitForSeconds(0.5f);
         }
 
     }
+
     
     private void Update()
     {
         if (map == null)
             return;
+        
+    
         
     }
 }
